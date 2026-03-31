@@ -27,12 +27,39 @@
       min-height: 100dvh;
       max-width: 430px;
       margin: 0 auto;
+      overflow-x: hidden;
     }
+
+    /* ══ SPINNING STARS ══ */
+    @keyframes spinCW  { to { transform: rotate(360deg);  } }
+    @keyframes spinCCW { to { transform: rotate(-360deg); } }
+    @keyframes fadeUp  { from { opacity:0; transform:translateY(14px); } to { opacity:1; transform:translateY(0); } }
+    @keyframes popIn   { from { opacity:0; transform:scale(.8); } to { opacity:1; transform:scale(1); } }
+
+    .star {
+      position: fixed;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .star svg { display: block; }
+    .spin-cw  { animation: spinCW  14s linear infinite; transform-origin: center; }
+    .spin-ccw { animation: spinCCW 18s linear infinite; transform-origin: center; }
+
+    /* positions */
+    .star-tl { top: 18px;  left: 18px;  }
+    .star-tr { top: 14px;  right: 16px; }
+    .star-ml { top: 42%;   left: 12px;  }
+    .star-mr { top: 38%;   right: 10px; }
+    .star-bl { bottom: 60px; left: 20px; }
+    .star-br { bottom: 80px; right: 18px; }
 
     /* ══ HERO ══ */
     .hero {
-      padding: 48px 24px 0;
+      padding: 54px 24px 0;
       text-align: center;
+      position: relative;
+      z-index: 1;
+      animation: fadeUp .55s ease both;
     }
 
     .hero-inner {
@@ -40,16 +67,21 @@
       border-radius: 24px;
       padding: 32px 28px 28px;
       position: relative;
+      overflow: hidden;
+      box-shadow: 0 4px 28px rgba(0,35,102,.08);
     }
 
-    .hero-inner canvas {
+    /* coloured blobs inside hero card — like vizitka */
+    .hero-blob {
       position: absolute;
-      top: -9px; left: -9px;
-      width: calc(100% + 18px);
-      height: calc(100% + 18px);
       pointer-events: none;
-      border-radius: 0;
+      border-radius: 50%;
+      filter: blur(28px);
+      opacity: .55;
     }
+    .blob-pink   { width: 140px; height: 140px; background: var(--pink);   top: -40px; right: -30px; }
+    .blob-green  { width: 110px; height: 110px; background: var(--green);  bottom: -30px; left: -20px; opacity:.35; }
+    .blob-yellow { width: 90px;  height: 90px;  background: var(--yellow); bottom: -20px; right: 20px; opacity:.5; }
 
     .date-pill {
       display: inline-block;
@@ -59,45 +91,54 @@
       text-transform: uppercase;
       color: var(--orange);
       background: #fff5ef;
-      border: 1.5px solid #ffd0a8;
+      border: 1px solid #ffd0a8;
       border-radius: 100px;
       padding: 5px 14px;
       margin-bottom: 16px;
+      position: relative;
+      z-index: 1;
     }
 
     h1 {
-      font-size: 3.4rem;
+      font-size: 3.6rem;
       font-weight: 800;
       color: var(--navy);
       letter-spacing: -.02em;
       line-height: 1;
       text-transform: uppercase;
+      position: relative;
+      z-index: 1;
     }
 
     .sub {
-      font-size: .7rem;
+      font-size: .68rem;
       font-weight: 500;
-      letter-spacing: .3em;
+      letter-spacing: .28em;
       text-transform: uppercase;
       color: #c0b0a0;
-      margin-top: 8px;
+      margin-top: 9px;
+      position: relative;
+      z-index: 1;
     }
 
-    /* ══ NAV PILLS ══ */
+    /* ══ NAV ══ */
     nav {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
       gap: 7px;
       padding: 28px 20px 0;
+      position: relative;
+      z-index: 1;
+      animation: fadeUp .55s .1s ease both;
     }
 
     .tab {
       cursor: pointer;
       padding: 8px 16px;
       border-radius: 100px;
-      border: 1px solid rgba(0,35,102,.3);
-      font-size: .7rem;
+      border: 1px solid rgba(0,35,102,.25);
+      font-size: .68rem;
       font-weight: 600;
       letter-spacing: .08em;
       text-transform: uppercase;
@@ -106,30 +147,47 @@
       font-family: 'Montserrat', sans-serif;
       transition: all .18s;
       -webkit-tap-highlight-color: transparent;
+      box-shadow: 0 2px 8px rgba(0,0,0,.04);
     }
-    .tab.active { background: var(--navy); color: var(--white); }
+    .tab:active { transform: scale(.96); }
+    .tab.active { background: var(--navy); color: var(--white); border-color: var(--navy); }
 
-    /* ══ SECTIONS ══ */
+    /* ══ MAIN ══ */
     main {
-      padding: 28px 20px 60px;
+      padding: 24px 20px 70px;
+      position: relative;
+      z-index: 1;
     }
 
-    .section { display: none; animation: fadeUp .35s ease both; }
+    .section { display: none; animation: popIn .3s ease both; }
     .section.visible { display: block; }
 
-    /* wavy card */
+    /* ══ SECTION CARD ══ */
     .sec-card {
       background: var(--white);
       border-radius: 22px;
-      padding: 28px 22px 24px;
+      padding: 26px 22px 22px;
       position: relative;
+      overflow: hidden;
+      box-shadow: 0 2px 16px rgba(0,35,102,.06);
     }
 
-    .sec-card canvas {
+    /* coloured top accent bar */
+    .sec-card::before {
+      content: '';
       position: absolute;
-      top: -9px; left: -9px;
-      width: calc(100% + 18px);
-      height: calc(100% + 18px);
+      top: 0; left: 0; right: 0;
+      height: 4px;
+      border-radius: 22px 22px 0 0;
+      background: var(--accent, var(--navy));
+    }
+
+    /* subtle bg tint */
+    .sec-card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 80% 60% at 90% 10%, var(--tint, transparent) 0%, transparent 70%);
       pointer-events: none;
     }
 
@@ -137,25 +195,34 @@
       display: flex;
       align-items: center;
       gap: 12px;
-      margin-bottom: 22px;
+      margin-bottom: 20px;
       position: relative;
       z-index: 1;
     }
 
     .sec-emoji {
-      width: 42px; height: 42px;
-      border-radius: 12px;
+      width: 40px; height: 40px;
+      border-radius: 11px;
       display: flex; align-items: center; justify-content: center;
-      font-size: 1.3rem;
+      font-size: 1.25rem;
       flex-shrink: 0;
     }
 
     .sec-name {
-      font-size: 1.3rem;
+      font-size: 1.2rem;
       font-weight: 700;
       color: var(--navy);
       letter-spacing: -.01em;
     }
+
+    /* little spinning star in card corner */
+    .card-star {
+      position: absolute;
+      top: 14px; right: 16px;
+      z-index: 2;
+      opacity: .6;
+    }
+    .card-star svg { display: block; }
 
     /* ══ DISH ROWS ══ */
     .dish-list {
@@ -170,63 +237,136 @@
       align-items: flex-start;
       justify-content: space-between;
       gap: 10px;
-      padding: 14px 0;
+      padding: 13px 0;
       border-bottom: 1px dashed #ede5db;
     }
     .dish:last-child { border-bottom: none; padding-bottom: 0; }
-
     .dish-left { flex: 1; }
 
     .dish-name {
-      font-size: .88rem;
+      font-size: .86rem;
       font-weight: 600;
       color: var(--navy);
       margin-bottom: 3px;
       letter-spacing: -.01em;
     }
-
     .dish-desc {
-      font-size: .72rem;
+      font-size: .7rem;
       color: #a09080;
       font-weight: 300;
       line-height: 1.5;
     }
-
-    .dish-emo {
-      font-size: 1.1rem;
-      flex-shrink: 0;
-      margin-top: 1px;
-    }
+    .dish-emo { font-size: 1.1rem; flex-shrink: 0; margin-top: 1px; }
 
     /* ══ FOOTER ══ */
     footer {
       text-align: center;
-      font-size: .65rem;
+      font-size: .6rem;
       letter-spacing: .2em;
       text-transform: uppercase;
       color: #c8b8a8;
       font-weight: 500;
-      padding: 0 20px 40px;
-    }
-
-    @keyframes fadeUp {
-      from { opacity:0; transform:translateY(12px); }
-      to   { opacity:1; transform:translateY(0); }
+      padding: 0 20px 48px;
+      position: relative;
+      z-index: 1;
     }
   </style>
 </head>
 <body>
 
-<!-- HERO -->
+<!-- ══ FLOATING STARS (like vizitka) ══ -->
+
+<!-- top-left: pink, large, CW -->
+<div class="star star-tl">
+  <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
+    <g class="spin-cw">
+      <line x1="18" y1="2"  x2="18" y2="34" stroke="#fabbee" stroke-width="3.5" stroke-linecap="round"/>
+      <line x1="2"  y1="18" x2="34" y2="18" stroke="#fabbee" stroke-width="3.5" stroke-linecap="round"/>
+      <line x1="5"  y1="5"  x2="31" y2="31" stroke="#fabbee" stroke-width="2.5" stroke-linecap="round"/>
+      <line x1="31" y1="5"  x2="5"  y2="31" stroke="#fabbee" stroke-width="2.5" stroke-linecap="round"/>
+      <circle cx="18" cy="18" r="3.5" fill="#fabbee"/>
+    </g>
+  </svg>
+</div>
+
+<!-- top-right: orange, small, CCW -->
+<div class="star star-tr">
+  <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+    <g class="spin-ccw">
+      <line x1="11" y1="1"  x2="11" y2="21" stroke="#ff9452" stroke-width="2.5" stroke-linecap="round"/>
+      <line x1="1"  y1="11" x2="21" y2="11" stroke="#ff9452" stroke-width="2.5" stroke-linecap="round"/>
+      <line x1="3"  y1="3"  x2="19" y2="19" stroke="#ff9452" stroke-width="2"   stroke-linecap="round"/>
+      <line x1="19" y1="3"  x2="3"  y2="19" stroke="#ff9452" stroke-width="2"   stroke-linecap="round"/>
+      <circle cx="11" cy="11" r="2.5" fill="#ff9452"/>
+    </g>
+  </svg>
+</div>
+
+<!-- mid-left: green, medium, CCW -->
+<div class="star star-ml">
+  <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+    <g class="spin-ccw">
+      <line x1="14" y1="2"  x2="14" y2="26" stroke="#8ab374" stroke-width="3" stroke-linecap="round"/>
+      <line x1="2"  y1="14" x2="26" y2="14" stroke="#8ab374" stroke-width="3" stroke-linecap="round"/>
+      <line x1="4"  y1="4"  x2="24" y2="24" stroke="#8ab374" stroke-width="2" stroke-linecap="round"/>
+      <line x1="24" y1="4"  x2="4"  y2="24" stroke="#8ab374" stroke-width="2" stroke-linecap="round"/>
+      <circle cx="14" cy="14" r="3" fill="#8ab374"/>
+    </g>
+  </svg>
+</div>
+
+<!-- mid-right: blue, small, CW -->
+<div class="star star-mr">
+  <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+    <g class="spin-cw">
+      <line x1="10" y1="1"  x2="10" y2="19" stroke="#99daff" stroke-width="2.5" stroke-linecap="round"/>
+      <line x1="1"  y1="10" x2="19" y2="10" stroke="#99daff" stroke-width="2.5" stroke-linecap="round"/>
+      <line x1="3"  y1="3"  x2="17" y2="17" stroke="#99daff" stroke-width="2"   stroke-linecap="round"/>
+      <line x1="17" y1="3"  x2="3"  y2="17" stroke="#99daff" stroke-width="2"   stroke-linecap="round"/>
+      <circle cx="10" cy="10" r="2.5" fill="#99daff"/>
+    </g>
+  </svg>
+</div>
+
+<!-- bottom-left: navy, tiny, CW -->
+<div class="star star-bl" style="opacity:.3;">
+  <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+    <g class="spin-cw">
+      <line x1="8" y1="1"  x2="8"  y2="15" stroke="#002366" stroke-width="2" stroke-linecap="round"/>
+      <line x1="1" y1="8"  x2="15" y2="8"  stroke="#002366" stroke-width="2" stroke-linecap="round"/>
+      <line x1="2" y1="2"  x2="14" y2="14" stroke="#002366" stroke-width="1.5" stroke-linecap="round"/>
+      <line x1="14" y1="2" x2="2"  y2="14" stroke="#002366" stroke-width="1.5" stroke-linecap="round"/>
+      <circle cx="8" cy="8" r="2" fill="#002366"/>
+    </g>
+  </svg>
+</div>
+
+<!-- bottom-right: yellow-gold, medium, CCW -->
+<div class="star star-br">
+  <svg width="26" height="26" viewBox="0 0 26 26" fill="none">
+    <g class="spin-ccw">
+      <line x1="13" y1="2"  x2="13" y2="24" stroke="#e8c400" stroke-width="3" stroke-linecap="round"/>
+      <line x1="2"  y1="13" x2="24" y2="13" stroke="#e8c400" stroke-width="3" stroke-linecap="round"/>
+      <line x1="4"  y1="4"  x2="22" y2="22" stroke="#e8c400" stroke-width="2" stroke-linecap="round"/>
+      <line x1="22" y1="4"  x2="4"  y2="22" stroke="#e8c400" stroke-width="2" stroke-linecap="round"/>
+      <circle cx="13" cy="13" r="3" fill="#e8c400"/>
+    </g>
+  </svg>
+</div>
+
+<!-- ══ HERO ══ -->
 <div class="hero">
   <div class="hero-inner" id="heroBox">
+    <div class="hero-blob blob-pink"></div>
+    <div class="hero-blob blob-green"></div>
+    <div class="hero-blob blob-yellow"></div>
     <div class="date-pill">✦ 11 lipca 2026 ✦</div>
     <h1>Menu</h1>
     <p class="sub">Wesele Damiana & Pauli</p>
   </div>
 </div>
 
-<!-- NAV -->
+<!-- ══ NAV ══ -->
 <nav>
   <button class="tab active" onclick="show('przystawki',this)">Przystawki</button>
   <button class="tab" onclick="show('zupa',this)">Zupy</button>
@@ -237,9 +377,20 @@
 
 <main>
 
-  <!-- PRZYSTAWKI – orange -->
+  <!-- PRZYSTAWKI -->
   <section class="section visible" id="przystawki">
-    <div class="sec-card" data-stroke="#ff9452">
+    <div class="sec-card" style="--accent:var(--orange);--tint:rgba(255,148,82,.08);">
+      <div class="card-star">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+          <g class="spin-cw">
+            <line x1="9" y1="1"  x2="9"  y2="17" stroke="#ff9452" stroke-width="2" stroke-linecap="round"/>
+            <line x1="1" y1="9"  x2="17" y2="9"  stroke="#ff9452" stroke-width="2" stroke-linecap="round"/>
+            <line x1="2" y1="2"  x2="16" y2="16" stroke="#ff9452" stroke-width="1.5" stroke-linecap="round"/>
+            <line x1="16" y1="2" x2="2"  y2="16" stroke="#ff9452" stroke-width="1.5" stroke-linecap="round"/>
+            <circle cx="9" cy="9" r="2" fill="#ff9452"/>
+          </g>
+        </svg>
+      </div>
       <div class="sec-header">
         <div class="sec-emoji" style="background:#fff5ef;">🥗</div>
         <div class="sec-name">Przystawki</div>
@@ -253,9 +404,20 @@
     </div>
   </section>
 
-  <!-- ZUPY – yellow -->
+  <!-- ZUPY -->
   <section class="section" id="zupa">
-    <div class="sec-card" data-stroke="#e8c400">
+    <div class="sec-card" style="--accent:#e8c400;--tint:rgba(232,196,0,.07);">
+      <div class="card-star">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+          <g class="spin-ccw">
+            <line x1="9" y1="1"  x2="9"  y2="17" stroke="#e8c400" stroke-width="2" stroke-linecap="round"/>
+            <line x1="1" y1="9"  x2="17" y2="9"  stroke="#e8c400" stroke-width="2" stroke-linecap="round"/>
+            <line x1="2" y1="2"  x2="16" y2="16" stroke="#e8c400" stroke-width="1.5" stroke-linecap="round"/>
+            <line x1="16" y1="2" x2="2"  y2="16" stroke="#e8c400" stroke-width="1.5" stroke-linecap="round"/>
+            <circle cx="9" cy="9" r="2" fill="#e8c400"/>
+          </g>
+        </svg>
+      </div>
       <div class="sec-header">
         <div class="sec-emoji" style="background:#fffbea;">🍲</div>
         <div class="sec-name">Zupy</div>
@@ -268,9 +430,20 @@
     </div>
   </section>
 
-  <!-- DANIA GŁÓWNE – green -->
+  <!-- DANIA GŁÓWNE -->
   <section class="section" id="glowne">
-    <div class="sec-card" data-stroke="#8ab374">
+    <div class="sec-card" style="--accent:var(--green);--tint:rgba(138,179,116,.08);">
+      <div class="card-star">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+          <g class="spin-cw">
+            <line x1="9" y1="1"  x2="9"  y2="17" stroke="#8ab374" stroke-width="2" stroke-linecap="round"/>
+            <line x1="1" y1="9"  x2="17" y2="9"  stroke="#8ab374" stroke-width="2" stroke-linecap="round"/>
+            <line x1="2" y1="2"  x2="16" y2="16" stroke="#8ab374" stroke-width="1.5" stroke-linecap="round"/>
+            <line x1="16" y1="2" x2="2"  y2="16" stroke="#8ab374" stroke-width="1.5" stroke-linecap="round"/>
+            <circle cx="9" cy="9" r="2" fill="#8ab374"/>
+          </g>
+        </svg>
+      </div>
       <div class="sec-header">
         <div class="sec-emoji" style="background:#f2f7ef;">🍽️</div>
         <div class="sec-name">Dania główne</div>
@@ -284,9 +457,20 @@
     </div>
   </section>
 
-  <!-- DESERY – pink -->
+  <!-- DESERY -->
   <section class="section" id="desery">
-    <div class="sec-card" data-stroke="#e070b0">
+    <div class="sec-card" style="--accent:#e070b0;--tint:rgba(250,187,238,.1);">
+      <div class="card-star">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+          <g class="spin-ccw">
+            <line x1="9" y1="1"  x2="9"  y2="17" stroke="#e070b0" stroke-width="2" stroke-linecap="round"/>
+            <line x1="1" y1="9"  x2="17" y2="9"  stroke="#e070b0" stroke-width="2" stroke-linecap="round"/>
+            <line x1="2" y1="2"  x2="16" y2="16" stroke="#e070b0" stroke-width="1.5" stroke-linecap="round"/>
+            <line x1="16" y1="2" x2="2"  y2="16" stroke="#e070b0" stroke-width="1.5" stroke-linecap="round"/>
+            <circle cx="9" cy="9" r="2" fill="#e070b0"/>
+          </g>
+        </svg>
+      </div>
       <div class="sec-header">
         <div class="sec-emoji" style="background:#fef2fa;">🍰</div>
         <div class="sec-name">Desery</div>
@@ -300,9 +484,20 @@
     </div>
   </section>
 
-  <!-- NAPOJE – blue -->
+  <!-- NAPOJE -->
   <section class="section" id="napoje">
-    <div class="sec-card" data-stroke="#4aabdf">
+    <div class="sec-card" style="--accent:var(--blue);--tint:rgba(153,218,255,.1);">
+      <div class="card-star">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+          <g class="spin-cw">
+            <line x1="9" y1="1"  x2="9"  y2="17" stroke="#4aabdf" stroke-width="2" stroke-linecap="round"/>
+            <line x1="1" y1="9"  x2="17" y2="9"  stroke="#4aabdf" stroke-width="2" stroke-linecap="round"/>
+            <line x1="2" y1="2"  x2="16" y2="16" stroke="#4aabdf" stroke-width="1.5" stroke-linecap="round"/>
+            <line x1="16" y1="2" x2="2"  y2="16" stroke="#4aabdf" stroke-width="1.5" stroke-linecap="round"/>
+            <circle cx="9" cy="9" r="2" fill="#4aabdf"/>
+          </g>
+        </svg>
+      </div>
       <div class="sec-header">
         <div class="sec-emoji" style="background:#eef8ff;">🥂</div>
         <div class="sec-name">Napoje</div>
@@ -327,72 +522,6 @@
     document.getElementById(id).classList.add('visible');
     btn.classList.add('active');
   }
-
-  /* ── Draw wavy border on a canvas overlay ── */
-  function drawWavy(canvas, color) {
-    const dpr = window.devicePixelRatio || 1;
-    const W = canvas.offsetWidth;
-    const H = canvas.offsetHeight;
-    canvas.width  = W * dpr;
-    canvas.height = H * dpr;
-    const ctx = canvas.getContext('2d');
-    ctx.scale(dpr, dpr);
-
-    // Match the winetka style: tight regular scallop/squiggle
-    const amp  = 6;    // height of each wave
-    const wlen = 28;   // longer wavelength = more relaxed/loose wave
-    const pad  = 8;
-    const stepsPerPx = 3; // smooth bezier-like rendering
-
-    ctx.beginPath();
-    ctx.strokeStyle = color;
-    ctx.lineWidth   = 2;
-    ctx.lineJoin    = 'round';
-    ctx.lineCap     = 'round';
-
-    function waveEdge(x0, y0, x1, y1, first) {
-      const dx  = x1 - x0, dy = y1 - y0;
-      const len = Math.sqrt(dx*dx + dy*dy);
-      const ux  = dx/len, uy = dy/len;
-      const nx  = -uy,    ny =  ux;
-      const totalSteps = Math.round(len * stepsPerPx);
-      const cycles = len / wlen;
-
-      for (let i = 0; i <= totalSteps; i++) {
-        const t   = i / totalSteps;
-        // use sin for smooth scallop — starts and ends at 0
-        const off = amp * Math.sin(t * Math.PI * 2 * cycles);
-        const px  = x0 + ux*len*t + nx*off;
-        const py  = y0 + uy*len*t + ny*off;
-        if (i === 0 && first) ctx.moveTo(px, py);
-        else                  ctx.lineTo(px, py);
-      }
-    }
-
-    const x0 = pad, y0 = pad, x1 = W-pad, y1 = H-pad;
-    waveEdge(x0, y0, x1, y0, true);   // top  →
-    waveEdge(x1, y0, x1, y1, false);  // right ↓
-    waveEdge(x1, y1, x0, y1, false);  // bottom ←
-    waveEdge(x0, y1, x0, y0, false);  // left ↑
-    ctx.closePath();
-    ctx.stroke();
-  }
-
-  function initWavy(el, color) {
-    const canvas = document.createElement('canvas');
-    canvas.style.cssText = 'position:absolute;top:-9px;left:-9px;width:calc(100% + 18px);height:calc(100% + 18px);pointer-events:none;border-radius:0;';
-    el.style.position = 'relative';
-    el.insertBefore(canvas, el.firstChild);
-    // draw after layout
-    requestAnimationFrame(() => drawWavy(canvas, color));
-  }
-
-  window.addEventListener('load', () => {
-    initWavy(document.getElementById('heroBox'), '#ff9452');
-    document.querySelectorAll('.sec-card').forEach(card => {
-      initWavy(card, card.dataset.stroke || '#002366');
-    });
-  });
 </script>
 
 </body>
