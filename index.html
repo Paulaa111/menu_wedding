@@ -3,108 +3,117 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
-  <title>Menu Weselne - Co jemy?</title>
+  <title>Menu Weselne - Co jemy? / What are we eating?</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌸</text></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Spline+Sans+Mono:wght@700;800&family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      /* Kolory dokładnie ściągnięte z Twoich winietek */
       --yellow: #fde89c;
       --green:  #a6d1a1;
       --blue:   #a5daf2;
       --pink:   #fbcbe3;
-      --navy:   #061d4b; /* Głęboki granat z napisów */
+      --navy:   #061d4b; /* Granat z winietek */
       --bg:      #fafafa;
       --white:   #ffffff;
+      --text-gray: #7b88a0;
     }
 
     html, body {
-      font-family: 'Outfit', sans-serif;
+      font-family: 'Playfair Display', serif; /* Font do treści dań */
       background: var(--bg);
       color: var(--navy);
       min-height: 100dvh;
       max-width: 430px;
       margin: 0 auto;
       overflow-x: hidden;
+      position: relative;
     }
 
-    @keyframes popIn { from { opacity:0; transform:scale(.95); } to { opacity:1; transform:scale(1); } }
+    @keyframes popIn { from { opacity:0; transform:scale(.97); } to { opacity:1; transform:scale(1); } }
+    @keyframes subtleFloating { 0%, 100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-5px) scale(1.05); } }
+
+    /* ══ LANG SWITCHER (PL/EN) ══ */
+    .lang-switcher {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      padding: 20px 24px 0;
+      position: relative;
+      z-index: 20;
+    }
+
+    .lang-btn {
+      cursor: pointer;
+      border: 1px solid var(--navy);
+      border-radius: 100px;
+      background: var(--white);
+      color: var(--navy);
+      font-size: 0.7rem;
+      font-family: 'Spline Sans Mono', monospace;
+      font-weight: 700;
+      padding: 5px 12px;
+      letter-spacing: 0.05em;
+      transition: all 0.2s;
+    }
+    .lang-btn.active {
+      background: var(--navy);
+      color: var(--white);
+    }
 
     /* ══ HERO ══ */
     .hero {
-      padding: 45px 24px 10px;
+      padding: 30px 24px 15px;
       text-align: center;
+      position: relative;
+      z-index: 10;
     }
 
     .co-jemy {
-      font-family: 'Syne', sans-serif;
+      font-family: 'Spline Sans Mono', monospace;
       font-weight: 800;
       font-size: 2.8rem;
       color: var(--navy);
       text-transform: none;
-      letter-spacing: -0.02em;
+      letter-spacing: -0.1em; /* Mocno rozciągnięta retro czcionka */
       line-height: 1.1;
       margin-bottom: 5px;
+      display: inline-block;
     }
 
     .sub {
-      font-size: 0.85rem;
+      font-size: 0.9rem;
       font-weight: 500;
-      letter-spacing: .05em;
+      letter-spacing: .1em;
       text-transform: uppercase;
-      color: #7b88a0;
+      color: var(--text-gray);
     }
 
-    /* ══ NAV ══ */
-    nav {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 6px;
-      padding: 20px 16px;
-    }
-
-    .tab {
-      cursor: pointer;
-      padding: 7px 13px;
-      border-radius: 100px;
-      border: 1px solid rgba(6, 29, 75, 0.15);
-      font-size: .75rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      background: var(--white);
-      color: var(--navy);
-      font-family: 'Outfit', sans-serif;
-      transition: all .2s;
-      -webkit-tap-highlight-color: transparent;
-    }
-    .tab.active { 
-      background: var(--navy); 
-      color: var(--white); 
-      border-color: var(--navy); 
-    }
-
-    /* ══ MAIN ══ */
+    /* ══ MAIN (SEKCJE MENU) ══ */
     main {
-      padding: 10px 20px 50px;
+      padding: 10px 20px 60px;
+      position: relative;
+      z-index: 10;
     }
 
-    .section { display: none; animation: popIn .35s cubic-bezier(0.34, 1.56, 0.64, 1) both; }
+    .section { animation: popIn .35s ease both; display: none; }
     .section.visible { display: block; }
 
-    /* ══ RETRO RAMKA Z WINIETEK ══ */
+    /* ══ IDEALNIE Pofalowana (BĄBELKOWA) Ramka Z WINIETEK ══ */
     .sec-card {
       background: var(--white);
-      border-radius: 24px;
-      padding: 30px 22px 26px;
+      border-radius: 26px;
+      padding: 30px 24px 26px;
       position: relative;
-      /* Generowanie falowanego obramowania inspirowanego winietkami */
-      border: 4px solid var(--card-color, var(--yellow));
-      box-shadow: 0 8px 24px rgba(6, 29, 75, 0.04);
+      border: 6px solid var(--card-color, var(--yellow));
+      box-shadow: 0 10px 28px rgba(6, 29, 75, 0.05);
+      mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'%3E%3Cpath d='M10,0 C22.5,0 35,0 47.5,0 C60,0 72.5,0 85,0 C92.5,0 100,7.5 100,15 C100,27.5 100,40 100,52.5 C100,65 100,77.5 100,90 C100,97.5 92.5,100 85,100 C72.5,100 60,100 47.5,100 C35,100 22.5,100 10,100 C7.5,100 0,97.5 0,90 C0,77.5 0,65 0,52.5 C0,40 0,27.5 0,15 C0,7.5 7.5,0 10,0 Z M12.5,12.5 C10,12.5 7.5,15 7.5,17.5 C7.5,22.5 7.5,27.5 7.5,32.5 C7.5,37.5 7.5,42.5 7.5,47.5 C7.5,52.5 7.5,57.5 7.5,62.5 C7.5,67.5 7.5,72.5 7.5,77.5 C7.5,82.5 7.5,85 7.5,87.5 C7.5,90 10,92.5 12.5,92.5 C15,92.5 17.5,92.5 22.5,92.5 C27.5,92.5 32.5,92.5 37.5,92.5 C42.5,92.5 47.5,92.5 52.5,92.5 C57.5,92.5 62.5,92.5 67.5,92.5 C72.5,92.5 77.5,92.5 82.5,92.5 C87.5,92.5 90,92.5 92.5,92.5 C95,92.5 97.5,90 97.5,87.5 C97.5,82.5 97.5,77.5 97.5,72.5 C97.5,67.5 97.5,62.5 97.5,57.5 C97.5,52.5 97.5,47.5 97.5,42.5 C97.5,37.5 97.5,32.5 97.5,27.5 C97.5,22.5 97.5,17.5 97.5,12.5 C97.5,10 95,7.5 92.5,7.5 C90,7.5 87.5,7.5 82.5,7.5 C77.5,7.5 72.5,7.5 67.5,7.5 C62.5,7.5 57.5,7.5 52.5,7.5 C47.5,7.5 42.5,7.5 37.5,7.5 C32.5,7.5 27.5,7.5 22.5,7.5 C17.5,7.5 15,7.5 12.5,7.5 Z' fill='%23000'/%3E%3C/svg%3E");
+      mask-size: cover;
+      -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'%3E%3Cpath d='M10,0 C22.5,0 35,0 47.5,0 C60,0 72.5,0 85,0 C92.5,0 100,7.5 100,15 C100,27.5 100,40 100,52.5 C100,65 100,77.5 100,90 C100,97.5 92.5,100 85,100 C72.5,100 60,100 47.5,100 C35,100 22.5,100 10,100 C7.5,100 0,97.5 0,90 C0,77.5 0,65 0,52.5 C0,40 0,27.5 0,15 C0,7.5 7.5,0 10,0 Z' fill='%23000'/%3E%3C/svg%3E");
+      -webkit-mask-size: cover;
     }
 
     .sec-header {
@@ -113,24 +122,21 @@
     }
 
     .sec-name {
-      font-family: 'Syne', sans-serif;
+      font-family: 'Spline Sans Mono', monospace;
       font-weight: 800;
       font-size: 1.6rem;
       color: var(--navy);
-      letter-spacing: -0.01em;
+      letter-spacing: -0.06em; /* Retro spłaszczenie nagłówków */
+      text-transform: none;
     }
 
     /* ══ LISTA DAŃ ══ */
-    .dish-list {
-      display: flex;
-      flex-direction: column;
-    }
-
     .dish {
       display: flex;
       flex-direction: column;
       padding: 14px 0;
-      border-bottom: 1px dashed rgba(6, 29, 75, 0.1);
+      border-bottom: 1px dashed rgba(6, 29, 75, 0.08);
+      position: relative;
     }
     .dish:last-child { border-bottom: none; padding-bottom: 0; }
     .dish:first-child { padding-top: 0; }
@@ -142,130 +148,246 @@
       margin-bottom: 3px;
     }
     .dish-desc {
-      font-size: .82rem;
+      font-size: 0.88rem;
       color: #505f79;
       font-weight: 400;
       line-height: 1.4;
+      font-style: normal;
     }
 
+    /* ══ SUBTELNA ANIMACJA - PŁYWAJĄCE GWIAZDKI RETRO ══ */
+    .star-animation {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .star {
+      position: absolute;
+      color: var(--navy);
+      font-size: 1.1rem;
+      opacity: 0.15;
+      animation: subtleFloating 6s ease-in-out infinite;
+    }
+
+    .star-1 { top: 15%; left: 10%; animation-delay: 0s; }
+    .star-2 { top: 40%; right: 12%; animation-delay: 2s; }
+    .star-3 { top: 65%; left: 15%; animation-delay: 1s; }
+    .star-4 { bottom: 15%; right: 10%; animation-delay: 3s; }
+
+    /* ══ NAPISY JĘZYKOWE ══ */
+    [lang="en"] { display: none; }
+    body.lang-en [lang="pl"] { display: none; }
+    body.lang-en [lang="en"] { display: inline; }
+    body.lang-en .dish-desc[lang="en"] { display: block; }
+    
     /* ══ FOOTER ══ */
     footer {
       text-align: center;
-      font-size: .75rem;
+      font-size: 0.8rem;
       font-weight: 500;
-      color: #7b88a0;
+      color: var(--text-gray);
       padding: 0 20px 40px;
+      position: relative;
+      z-index: 10;
     }
   </style>
 </head>
-<body>
+<body class="lang-pl">
 
-<div class="hero">
-  <h1 class="co-jemy">Co jemy?</h1>
-  <p class="sub">Menu Weselne · Paula & Damian</p>
-</div>
+  <div class="star-animation">
+    <div class="star star-1">✦</div>
+    <div class="star star-2">✦</div>
+    <div class="star star-3">✦</div>
+    <div class="star star-4">✦</div>
+  </div>
 
-<nav>
-  <button class="tab active" onclick="show('powitanie',this)">Powitanie</button>
-  <button class="tab" onclick="show('obiad',this)">Obiad</button>
-  <button class="tab" onclick="show('zimna-plyta',this)">Zimna płyta</button>
-  <button class="tab" onclick="show('kolacja',this)">Kolacja</button>
-</nav>
+  <div class="lang-switcher">
+    <button class="lang-btn active" id="btnPl" onclick="switchLang('pl')">PL</button>
+    <button class="lang-btn" id="btnEn" onclick="switchLang('en')">EN</button>
+  </div>
 
-<main>
+  <div class="hero">
+    <h1 class="co-jemy">
+      <span lang="pl">Co jemy?</span>
+      <span lang="en">What are we eating?</span>
+    </h1>
+    <p class="sub">
+      <span lang="pl">Wesele Damiana & Pauli</span>
+      <span lang="en">Wedding of Paula & Damian</span>
+    </p>
+  </div>
 
-  <section class="section visible" id="powitanie">
-    <div class="sec-card" style="--card-color: var(--yellow);">
-      <div class="sec-header">
-        <div class="sec-name">Na powitanie</div>
-      </div>
-      <div class="dish-list">
-        <div class="dish">
-          <div class="dish-name">Toast powitalny</div>
-          <div class="dish-desc">Wino musujące (bez tradycyjnego chleba i soli)</div>
-        </div>
-        <div class="dish">
-          <div class="dish-name">Przystawka</div>
-          <div class="dish-desc">Eleganckie carpaccio z buraka</div>
-        </div>
-      </div>
-    </div>
-  </section>
+  <main>
 
-  <section class="section" id="obiad">
-    <div class="sec-card" style="--card-color: var(--green);">
-      <div class="sec-header">
-        <div class="sec-name">Obiad Główny</div>
-      </div>
-      <div class="dish-list">
-        <div class="dish">
-          <div class="dish-name">Zupa</div>
-          <div class="dish-desc">Aromatyczny krem borowikowy podawany z ptysiami</div>
+    <section class="section visible">
+      <div class="sec-card" style="--card-color: var(--yellow);">
+        <div class="sec-header">
+          <div class="sec-name">
+            <span lang="pl">Na powitanie</span>
+            <span lang="en">To Start</span>
+          </div>
         </div>
-        <div class="dish">
-          <div class="dish-name">Danie główne</div>
-          <div class="dish-desc">Klasyczny kotlet schabowy serwowany z ziemniakami z koperkiem oraz tradycyjnym mixem świeżych surówek</div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="section" id="zimna-plyta">
-    <div class="sec-card" style="--card-color: var(--blue);">
-      <div class="sec-header">
-        <div class="sec-name">Zimne Przekąski</div>
-      </div>
-      <div class="dish-list">
-        <div class="dish">
-          <div class="dish-name">Przekąski bankietowe</div>
-          <div class="dish-desc">Mini tortille z chrupiącymi warzywami, delikatne pierożki faszerowane, wykwintne tartinki z łososiem oraz mini crepes</div>
-        </div>
-        <div class="dish">
-          <div class="dish-name">Selekcja sałatek</div>
-          <div class="dish-desc">Wyrazista sałatka z kurczakiem i gyrosem, lekka sałatka brokułowa z jajkiem (lub klasyczny Cezar) oraz puszyste Caprese z pomidorami i mozzarellą</div>
-        </div>
-        <div class="dish">
-          <div class="dish-name">Dodatki</div>
-          <div class="dish-desc">Świeże, chrupiące pieczywo weselne</div>
+        <div class="dish-list">
+          <div class="dish">
+            <div class="dish-name">
+              <span lang="pl">Wino musujące</span>
+              <span lang="en">Sparkling Wine</span>
+            </div>
+            <div class="dish-desc">
+              <span lang="pl">(bez tradycyjnego chleba i soli)</span>
+              <span lang="en">(without traditional bread and salt)</span>
+            </div>
+          </div>
+          <div class="dish">
+            <div class="dish-name">
+              <span lang="pl">Przystawka</span>
+              <span lang="en">Appetizer</span>
+            </div>
+            <div class="dish-desc">
+              <span lang="pl">Eleganckie carpaccio z buraka</span>
+              <span lang="en">Elegant beet carpaccio</span>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <section class="section" id="kolacja">
-    <div class="sec-card" style="--card-color: var(--pink);">
-      <div class="sec-header">
-        <div class="sec-name">Kolacje na ciepło</div>
+    <section class="section visible">
+      <div class="sec-card" style="--card-color: var(--green);">
+        <div class="sec-header">
+          <div class="sec-name">
+            <span lang="pl">Główne Menu</span>
+            <span lang="en">Main Menu</span>
+          </div>
+        </div>
+        <div class="dish-list">
+          <div class="dish">
+            <div class="dish-name">
+              <span lang="pl">Zupa</span>
+              <span lang="en">Soup</span>
+            </div>
+            <div class="dish-desc">
+              <span lang="pl">Aromatyczny krem borowikowy z ptysiami</span>
+              <span lang="en">Aromatic porcini mushroom cream with puff pastries</span>
+            </div>
+          </div>
+          <div class="dish">
+            <div class="dish-name">
+              <span lang="pl">Danie główne</span>
+              <span lang="en">Main Course</span>
+            </div>
+            <div class="dish-desc">
+              <span lang="pl">Tradycyjny kotlet schabowy, ziemniaki z koperkiem oraz mix surówek</span>
+              <span lang="en">Traditional pork cutlet, potatoes with dill, and mixed salads</span>
+            </div>
+          </div>
+          <div class="dish">
+            <div class="dish-name">
+              <span lang="pl">Kolacja (Danie ciepłe I)</span>
+              <span lang="en">First Warm Supper</span>
+            </div>
+            <div class="dish-desc">
+              <span lang="pl">Polędwiczki wołowe w sosie demi-glace, kluski śląskie i buraczki</span>
+              <span lang="en">Beef tenderloin in demi-glace sauce, Silesian dumplings, and beets</span>
+            </div>
+          </div>
+          <div class="dish">
+            <div class="dish-name">
+              <span lang="pl">Kolacja (Danie ciepłe II)</span>
+              <span lang="en">Second Warm Supper</span>
+            </div>
+            <div class="dish-desc">
+              <span lang="pl">Kotlet de volaille, opiekane ziemniaki oraz sałatka colesław</span>
+              <span lang="en">Chicken de volaille, roasted potatoes, and coleslaw</span>
+            </div>
+          </div>
+          <div class="dish">
+            <div class="dish-name">
+              <span lang="pl">Na zakończenie</span>
+              <span lang="en">To Finish</span>
+            </div>
+            <div class="dish-desc">
+              <span lang="pl">Rozgrzewający barszcz czerwony z chrupiącym krokietem</span>
+              <span lang="en">Warming red borscht with a crispy croquette</span>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="dish-list">
-        <div class="dish">
-          <div class="dish-name">I Kolacja ciepła</div>
-          <div class="dish-desc">Soczyste polędwiczki wołowe w aksamitnym sosie, podawane z tradycyjnymi kluskami śląskimi i aromatycznymi buraczkami</div>
+    </section>
+
+    <section class="section visible">
+      <div class="sec-card" style="--card-color: var(--blue);">
+        <div class="sec-header">
+          <div class="sec-name">
+            <span lang="pl">Zimna Płyta</span>
+            <span lang="en">Cold Buffet</span>
+          </div>
         </div>
-        <div class="dish">
-          <div class="dish-name">II Kolacja ciepła</div>
-          <div class="dish-desc">Tradycyjny, maślany kotlet de volaille w towarzystwie opiekanych ziemniaków i chrupiącej sałatki colesław</div>
-        </div>
-        <div class="dish">
-          <div class="dish-name">Na zakończenie</div>
-          <div class="dish-desc">Rozgrzewający, tradycyjny barszcz czerwony podawany z chrupiącym krokietem</div>
+        <div class="dish-list">
+          <div class="dish">
+            <div class="dish-name">
+              <span lang="pl">Przekąski bankietowe</span>
+              <span lang="en">Canapés & Snacks</span>
+            </div>
+            <div class="dish-desc">
+              <span lang="pl">Mini tortille warzywne, faszerowane pierożki, tartinki z łososiem oraz mini crepes</span>
+              <span lang="en">Vegetable mini tortillas, stuffed dumplings, salmon tartlets, and mini crepes</span>
+            </div>
+          </div>
+          <div class="dish">
+            <div class="dish-name">
+              <span lang="pl">Selekcja sałatek</span>
+              <span lang="en">Salad Selection</span>
+            </div>
+            <div class="dish-desc">
+              <span lang="pl">Wyrazista Kurczak Gyros, lekka sałatka brokułowa z jajkiem (lub klasyczny Cezar) oraz Caprese</span>
+              <span lang="en">Chicken Gyros, light broccoli salad with egg (or classic Caesar), and Caprese salad</span>
+            </div>
+          </div>
+          <div class="dish">
+            <div class="dish-name">
+              <span lang="pl">Pieczywo</span>
+              <span lang="en">Bread</span>
+            </div>
+            <div class="dish-desc">
+              <span lang="pl">Świeże, chrupiące pieczywo weselne</span>
+              <span lang="en">Fresh, artisan wedding bread</span>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-</main>
+  </main>
 
-<footer>11 lipca 2026 · Wesele Pauli & Damiana</footer>
+  <footer>
+    <span lang="pl">Wesele Damiana & Pauli · 11 lipca 2026</span>
+    <span lang="en">Paula & Damian's Wedding · July 11, 2026</span>
+  </footer>
 
-<script>
-  function show(id, btn) {
-    document.querySelectorAll('.section').forEach(s => s.classList.remove('visible'));
-    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-    document.getElementById(id).classList.add('visible');
-    btn.classList.add('active');
-  }
-</script>
+  <script>
+    // Funkcja do zmiany języka (PL/EN)
+    function switchLang(lang) {
+      if (lang === 'pl') {
+        document.body.classList.remove('lang-en');
+        document.body.classList.add('lang-pl');
+        document.getElementById('btnPl').classList.add('active');
+        document.getElementById('btnEn').classList.remove('active');
+      } else {
+        document.body.classList.remove('lang-pl');
+        document.body.classList.add('lang-en');
+        document.getElementById('btnEn').classList.add('active');
+        document.getElementById('btnPl').classList.remove('active');
+      }
+      // Automatyczne przewinięcie na górę strony, aby pokazać zmianę języka
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  </script>
 
 </body>
 </html>
